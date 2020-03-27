@@ -1,0 +1,85 @@
+[PROCEDURE]
+NAME Updatevendas
+PROTOTYPE '(NetWebServerWorker p_web,long p_action=0),long,proc'
+PARAMETERS '(NetWebServerWorker p_web,long p_action=0)'
+GLOBAL
+[COMMON]
+FROM NetTalk NetWebForm
+[FILES]
+[OTHERS]
+vendas
+[PROMPTS]
+%FormStyle DEFAULT  ('Net:Web:Default')
+%FormSource DEFAULT  ('File')
+%FormFile FILE  (vendas)
+%FormKey KEY  (ven:PRIMARY)
+%FormHeading DEFAULT  ('''Update Vendas''')
+%Tabs MULTI LONG  (1)
+%TabHeading DEPEND %Tabs DEFAULT TIMES 1
+WHEN  (1) ('''General''')
+
+%FormFields DEPEND %Tabs MULTI LONG TIMES 1
+WHEN  (1) (1,2,3)
+
+%FormField DEPEND %FormFields FIELD TIMES 1
+WHEN  (1)TIMES 3
+WHEN  (1) (ven:TipoVenda)
+WHEN  (2) (ven:VendaSap)
+WHEN  (3) (ven:Quantidade)
+
+%FormFieldType DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 3
+WHEN  (1) ('String')
+WHEN  (2) ('String')
+WHEN  (3) ('Number')
+
+%FormFieldButtonset DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 3
+WHEN  (1) (0)
+WHEN  (2) (0)
+WHEN  (3) (0)
+
+
+%FormFieldLookupButton DEPEND %FormFields LONG TIMES 1
+WHEN  (1)TIMES 0
+%FormFieldPopupLookup DEPEND %FormFields LONG TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldLookupProcedure DEPEND %FormFields PROCEDURE TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldLookupTitle DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldLookupFile DEPEND %FormFields FILE TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldDropValue DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldLookupDescField DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldLookupSortField DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldDisplayDesc DEPEND %FormFields LONG TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldEquate DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 3
+WHEN  (1) ('ven:TipoVenda')
+WHEN  (2) ('ven:VendaSap')
+WHEN  (3) ('ven:Quantidade')
+
+%FormFieldProcedure DEPEND %FormFields PROCEDURE TIMES 1
+WHEN  (1)TIMES 3
+WHEN  (1) ()
+WHEN  (2) ()
+WHEN  (3) ()
+
+%FormFieldCondition DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 0
+
+%FormFieldAutoComplete DEPEND %FormFields LONG TIMES 1
+WHEN  (1)TIMES 0

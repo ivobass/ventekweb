@@ -1,0 +1,118 @@
+/* NetTalk menu css */
+.ui-menu .ui-menu-icon {right:0.5em;}
+.ui-menu .ui-menu-item {margin-right:0.3em;}
+
+.nt-menu-div {
+border:0px solid!important;
+height:2.5em;
+width:99%;
+border-collapse: collapse;
+margin:4px;  
+}
+
+.nt-menu{
+display:flex;
+border:0px solid!important;
+padding: 0;
+margin-bottom: 0.5em;
+margin-top: 0;
+list-style: none;
+border-collapse: collapse;
+font-weight:normal;
+}
+
+.nt-mainmenu-button{
+padding:0.5em;
+width: 20em;
+display: flex;
+align-items:center;
+justify-content:flex-start;
+}
+/*accordion & taskpanel menus*/
+.ui-accordion .ui-accordion-header{display:flex;align-items:center;justify-content:space-between;}
+.nt-accordion-menu-header{}
+.nt-taskpanel-menu-header{display:flex;align-items:center;justify-content:space-between;}
+.nt-taskpanel-menu-body{padding:0.2em!important;border:0}
+.ui-accordion-content {max-height: 400px;}
+.nt-accordion-icon-left{flex-direction:row;}
+.nt-accordion-icon-right{flex-direction:row-reverse;}
+.nt-menu-drop{}
+.nt-menu-nodrop{}
+.nt-menu-button{display:flex;}
+.ui-menu .ui-state-active{margin:0!important;}
+
+.nt-menu a:link, .nt-menu a:visited, .nt-menu a:hover, .nt-menu a:active {
+padding:0.5em;
+padding-left:1em;
+padding-right:1em;
+}
+
+.nt-menu-button {
+display: flex;
+min-width: 100px;
+text-align:center;
+align-items: center;
+padding: 5px 4%;
+text-decoration: none;
+border:0!important;
+}
+
+.nt-menu-items{
+list-style: none;
+position: absolute;
+margin: 0;
+z-index: 90;
+padding: 0;
+}
+
+.nt-menu-items-button {
+display: flex;
+width: auto;
+min-width: 152px;
+padding: 5px;
+text-decoration: none;
+}
+
+/* changed ul to use nt-menu-items instead of nt-menu-item */
+.nt-menu-items{border:0!important;}
+.nt-menu-item{display:flex;align-items:center;}
+.nt-menu-item{white-space: nowrap;margin-right: 0.1em!important;}
+
+.nt-menu-item-alone{
+display: flex;
+align-items: center;
+text-decoration: none;
+width: 100%;
+font-weight: normal;
+padding: .5em 2em .5em .5em;
+margin-top: 2px;
+margin-bottom: 2px;
+height: 3em;
+}
+
+.nt-menu-item a{display:flex;align-items:center;text-decoration:none;width:100%}
+.nt-menu-text{padding-left:1em;padding-right:1em;}
+.nt-menu-item-text{padding-left:1em;padding-right:1em;}
+.nt-menu > li ul li ul {margin: -29px 0 0 163px;position: absolute;}
+.nt-menu span {/*	float: right;*/}
+.nt-menuleft{float:left;margin-right:20px;margin-top:10px;}
+.nt-menuright{float:right;margin-left:20px;margin-top:10px;}
+.nt-small-menu{display:none}
+
+@media screen and (max-width: 640px){
+	.nt-small-menu{
+        width: 32px;
+        height: 32px;
+        display: inline-block;	
+		position:absolute;
+		top:10px;
+		right:10px;	
+	}
+	.nt-menu-div{padding:0;margin:0;}
+    .nt-menu{position: absolute;    top: 70px;    left: 0; width:100%}	
+	.nt-menu-div ul{ display:none;}	
+	.nt-menu > li {float:none; width:100%}
+    .nt-menu > li ul {width:100%}
+	.nt-menu a:link{padding:1em;}
+}
+	

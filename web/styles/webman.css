@@ -1,0 +1,61 @@
+.wmFooter {
+  border-top: 4px solid #DC9F40;
+  border-left: 0px;
+  border-bottom: 0px;
+  border-right: 0px;
+  font-family: Century Gothic,Tahoma,Verdana,Arial,Helvetica,sans-serif;
+  font-size: 10px;
+  font-weight: normal;
+  color: #888;
+  width: 100%;
+  background-color: #FAFAFA;
+  padding: 4px;
+  border-collapse: collapse; 
+  /* position: absolute; */
+  position: fixed;
+  bottom: 0px;
+  left: 0px;
+  text-align:left;
+}
+
+.wmHeader {
+  border-top: 0px;
+  border-left: 0px;
+  border-bottom: 4px solid #DC9F40;
+  border-right: 0px;
+  font-family: Century Gothic,Tahoma,Verdana,Arial,Helvetica,sans-serif;
+  font-size: 24px;
+  font-weight: normal;
+  color: #888;
+  width: 100%;
+  background-color: #FAFAFA;
+  padding: 4px;
+  border-collapse: collapse;
+}
+
+.wmHeader td{
+ padding: 4px;
+}
+
+table.wmNoTable {
+  font-family: Tahoma, Verdana,  Arial, Helvetica, sans-serif;
+  font-size: 11px;
+  color: #333;
+  margin: 5px 0px 5px;
+  border-color: #888;
+  border-top: 0px solid #888;
+  border-left: 0px solid #888;
+  border-bottom: 0px solid #888;
+  border-right: 0px solid #888;
+  padding: 10px;
+  border-spacing: 0px;
+}
+
+
+table.wmNoTable td {
+  padding: 10px;
+  border-left: 0px solid #AAA;
+  border-right: 0px solid #EEE;
+  border-bottom: 0px solid #CCC;
+  border-top: 0px solid #EEE;
+}

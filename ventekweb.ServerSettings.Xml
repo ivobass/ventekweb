@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+  <ServerSettings>
+    <set.secureport>0</set.secureport>
+    <set.insecureport>88</set.insecureport>
+    <set.accountname/>
+    <set.domains/>
+    <set.certificatesfolder>C:\programas Clarion\ventek\ventekweb\ventekweb\certificates</set.certificatesfolder>
+    <set.lastcertificatecheckdate>80077</set.lastcertificatecheckdate>
+    <set.staging>0</set.staging>
+    <set.webfolder>C:\programas Clarion\ventek\ventekweb\ventekweb\web</set.webfolder>
+    <set.acmefolder>C:\programas Clarion\ventek\ventekweb\ventekweb\web</set.acmefolder>
+    <set.bindtoipaddress/>
+    <set.sessiontimeout>90001</set.sessiontimeout>
+    <set.xframeoptions>sameorigin</set.xframeoptions>
+    <set.accesscontrolalloworigin/>
+    <set.stricttransportsecurity/>
+    <set.contentsecuritypolicy/>
+    <set.contentsecuritypolicyreportonly/>
+    <set.referrerpolicy>strict-origin-when-cross-origin</set.referrerpolicy>
+  </ServerSettings>

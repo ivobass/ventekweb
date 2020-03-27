@@ -1,0 +1,40 @@
+.nt-fix-bottom-center{
+position:absolute;
+bottom:0;
+margin-left: auto;
+margin-right: auto;
+/* the following 2 lines vary 
+FireFox, IE8, Safari, Chrome, Opera : yes, required
+IE7 : no, must be suppressed
+IE6 : doesn't work either way.
+*/
+left:0;
+right:0; 
+}
+
+.nt-fix-top-center{
+position:absolute;
+top:0;
+margin-left: auto;
+margin-right: auto;
+/* the following 2 lines vary 
+FireFox, IE8, Safari, Chrome, Opera : yes, required
+IE7 : no, must be suppressed
+IE6 : doesn't work either way.
+*/
+left:0;
+right:0; 
+}
+
+.nt-fix-center{
+position:relative;
+margin-left: auto;
+margin-right: auto;
+/* the following 2 lines vary 
+FireFox, IE8, Safari, Chrome, Opera : yes, required
+IE7 : no, must be suppressed
+IE6 : doesn't work either way.
+*/
+left:0;
+right:0; 
+}

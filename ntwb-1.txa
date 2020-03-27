@@ -1,0 +1,75 @@
+[PROCEDURE]
+NAME Browsevendas
+PROTOTYPE '(NetWebServerWorker p_web)'
+PARAMETERS '(NetWebServerWorker p_web)'
+GLOBAL
+[COMMON]
+FROM NetTalk NetWebBrowse
+[FILES]
+[PRIMARY]
+vendas
+[INSTANCE]
+0
+[SECONDARY]
+[PROMPTS]
+%nHeading DEFAULT  ('''Vendas''')
+%nEmptyMessage DEFAULT  ('''no Vendas''')
+%nFormControl PROCEDURE  (Updatevendas)
+%nInsert LONG  (1)
+%nCancel LONG  (1)
+%nSelect LONG  (0)
+%nChange LONG  (0)
+%nDelete LONG  (0)
+%nCopy LONG  (0)
+%nFormPopup LONG  (1)
+%nFields MULTI LONG (1,2,3,4,5,6,7)
+
+%nField DEPEND %nFields FIELD TIMES 7
+WHEN  (1) (ven:TipoVenda)
+WHEN  (2) (ven:VendaSap)
+WHEN  (3) (ven:Quantidade)
+WHEN  (4) ()
+WHEN  (5) ()
+WHEN  (6) ()
+WHEN  (7) ()
+
+%BrowseFieldType DEPEND %nFields DEFAULT TIMES 7
+WHEN  (1) ('String')
+WHEN  (2) ('String')
+WHEN  (3) ('String')
+WHEN  (4) ('Button')
+WHEN  (5) ('Button')
+WHEN  (6) ('Button')
+WHEN  (7) ('Button')
+
+%BrowseButtonAction DEPEND %nFields DEFAULT TIMES 7
+WHEN  (1) ('Change')
+WHEN  (2) ('Change')
+WHEN  (3) ('Change')
+WHEN  (4) ('Copy')
+WHEN  (5) ('Change')
+WHEN  (6) ('Delete')
+WHEN  (7) ('Select')
+
+%nFieldEquate DEPEND %nFields DEFAULT TIMES 7
+WHEN  (1) ('ven:TipoVenda')
+WHEN  (2) ('ven:VendaSap')
+WHEN  (3) ('ven:Quantidade')
+WHEN  (4) ('Copy')
+WHEN  (5) ('Change')
+WHEN  (6) ('Delete')
+WHEN  (7) ('Select')
+
+
+%nSortDefault DEPEND %nFields LONG TIMES 1
+WHEN  (1) (1)
+%LocatorPlaceHolder DEFAULT  ('''Search''')
+%LocatorPosition DEFAULT  ('1')
+%LocatorType DEFAULT  ('Search')
+%LocatorBlank LONG  (0)
+%nLocatorMessage DEFAULT  ('''Enter a search term in the locator''')
+%SearchButton LONG  (1)
+%ClearButton LONG  (0)
+%BrowseLocatorSize DEFAULT  ('20')
+%BrowseLocatorPromptHide LONG  (0)
+%BrowseLocatorImmediate LONG  (1)

@@ -1,0 +1,710 @@
+[PROCEDURE]
+NAME WebServer
+PROTOTYPE '(<<NetWebServer pServer>),name(''WebServer'')'
+PARAMETERS '(<<NetWebServer pServer>)'
+[COMMON]
+FROM ABC Window
+[DATA]
+WebLog                   GROUP,PRE(web)
+EnableLogging              LONG
+!!> INITIAL('1')
+LastGet                    STRING(4096)
+LastPost                   STRING(4096)
+StartDate                  LONG
+StartTime                  LONG
+PagesServed                LONG
+                         END
+LogQueue                 QUEUE,PRE(LogQ)
+Port                       LONG
+Date                       LONG
+Time                       LONG
+Desc                       STRING(4096)
+                         END
+[PROMPTS]
+[ADDITION]
+NAME ABC CloseButton
+[INSTANCE]
+INSTANCE 2
+[ADDITION]
+NAME NetTalk IncludeNetTalkObject
+[INSTANCE]
+INSTANCE 3
+[PROMPTS]
+%ClassItem UNIQUE DEFAULT  ('Default')
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('ThisWebServer')
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('NetWebServer')
+
+%ListenOnInsecurePort DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('set:InsecurePort')
+
+%ListenOnSecurePort DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('set:SecurePort')
+
+%HostName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''localhost''')
+
+%WebHandlerProc DEPEND %ClassItem PROCEDURE TIMES 1
+WHEN  ('Default') (WebHandler)
+
+%theme DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''Sunny''')
+
+%WebDirectory DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''web''')
+
+%WebDatePicture DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('@D6')
+
+%NetSuppressErrorMsg DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%GenericPageHeaderTag DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''<<!-- Net:PageHeaderTag -->''')
+
+%GenericPageFooterTag DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''<<!-- Net:PageFooterTag -->''')
+
+%WebDefaultPage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''IndexPage''')
+
+%WebFormStyle DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Net:Web:Tab')
+
+%WebLoginPage DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''LoginForm''')
+
+%WebLoginPageControl DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+
+
+%IncludeHTMLEditor DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (0)
+
+%ServerCombine DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%ServerPreCompressed DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%ServerCheck DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%EnableFileCache DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%ServerTimeout DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('set:SessionTimeout')
+
+%ServerCharset DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('''utf-8''')
+
+%netStoreAs DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('net:StoreAsUTF8')
+
+%Styles DEPEND %ClassItem MULTI LONG TIMES 1
+WHEN  ('Default') (1)
+
+%StyleName DEPEND %Styles DEFAULT TIMES 1
+WHEN  ('Default')TIMES 1
+WHEN  (1) ('''Custom.Css''')
+
+%ThemeFiles DEPEND %ClassItem MULTI LONG TIMES 1
+WHEN  ('Default') (1)
+
+%ThemeName DEPEND %ThemeFiles DEFAULT TIMES 1
+WHEN  ('Default')TIMES 1
+WHEN  (1) ('''CustomT.Css''')
+
+[ADDITION]
+NAME NetTalk NetWebServerLogging
+[INSTANCE]
+INSTANCE 1
+[PROMPTS]
+%LogFile FILE  ()
+%LogField FIELD  ()
+%LogName FIELD  ()
+[ADDITION]
+NAME NetTalk NetWebServerPerformance
+[INSTANCE]
+INSTANCE 4
+[ADDITION]
+NAME NetTalk NetWebServerSettings
+[INSTANCE]
+INSTANCE 5
+[ADDITION]
+NAME NetTalk NetWebServerGracefulClose
+[INSTANCE]
+INSTANCE 6
+[WINDOW]
+Window  WINDOW('NetTalk Web Server'),AT(,,460,315),FONT('Segoe UI',10,,FONT:regular,CHARSET:ANSI), |
+          DOUBLE,AUTO,GRAY,IMM,SYSTEM
+          SHEET,AT(5,5,452,290),USE(?SHEET1)
+            TAB('Log'),USE(?TabLog)
+              GROUP('Logging Group'),AT(12,24,440,264),USE(?LogGroup),#ORIG(?LogGroup),#SEQ(1)
+                LIST,AT(17,29,430,70),USE(?LogQueue),VSCROLL,COLOR(,COLOR:Black,00F0F0F0h), |
+                  GRID(00F0F0F0h),FORMAT('51L(2)|M~IP Address~@s30@28L(2)|M~Socket~@n7@' & |
+                  '28L(2)|M~Thread~@n3@51L(2)|M~Date~@D17B@36L(2)|M~Time~@T4B@1020L(2)|' & |
+                  'M~Description~@s255@'),FROM(LogQueue),#ORIG(?LogQueue),#SEQ(1)
+                TEXT,AT(17,104,210,159),USE(web:LastGet),VSCROLL,#ORIG(web:LastGet),#SEQ(1)
+                TEXT,AT(236,104,210,159),USE(web:LastPost),VSCROLL,#ORIG(web:LastPost),#SEQ(1)
+                OPTION('Log:'),AT(17,266,147,22),USE(web:EnableLogging),BOXED,#ORIG(web:EnableLogging),#SEQ(1)
+                  RADIO('No'),AT(23,275),USE(?Option1:Radio1),TRN,VALUE('0'),#ORIG(?Option1:Radio1),#SEQ(1)
+                  RADIO('Screen'),AT(51,275),USE(?Option1:Radio2),TRN,VALUE('1'),#ORIG(?Option1:Radio2),#SEQ(1)
+                  RADIO('Screen && Disk'),AT(97,275,61),USE(?Option1:Radio3),TRN,VALUE('2'),#ORIG(?Option1:Radio3),#SEQ(1)
+                END
+                BUTTON('Clear'),AT(183,272,50,14),USE(?Clear),#ORIG(?Clear),#SEQ(1)
+                BUTTON('Ban'),AT(237,272,50,14),USE(?Ban),#ORIG(?Ban),#SEQ(1)
+              END
+            END
+            TAB('Performance'),USE(?TabPerformance)
+              STRING('Started At:'),AT(10,23),USE(?StartDate),TRN,#ORIG(?StartDate),#SEQ(4)
+              STRING(@d17),AT(88,23),USE(wp:StartDateA),TRN,#ORIG(wp:StartDateA),#SEQ(4)
+              STRING(@t1),AT(153,23),USE(wp:StartTimeA),TRN,#ORIG(wp:StartTimeA),#SEQ(4)
+              LIST,AT(228,23,184,74),USE(?BannedList),HVSCROLL,FORMAT('180L(2)|M~Banned' & |
+                ' IP Addresses~@s45@'),FROM(BannedQueue),#FIELDS(BannedQueue:IPAddress),#ORIG(?BannedList),#SEQ(4)
+              BUTTON('UnBan'),AT(228,101,50,14),USE(?UnBanButton),#ORIG(?UnBanButton),#SEQ(4)
+              GROUP('Number of Requests'),AT(10,37,173,82),USE(?Perfrequests),BOXED,#ORIG(?Perfrequests),#SEQ(4)
+                STRING('Total:'),AT(19,49),USE(?NumberOfRequests),TRN,#ORIG(?NumberOfRequests),#SEQ(4)
+                STRING(@n14),AT(82,49),USE(wp:NumberOfRequests),RIGHT,TRN,#ORIG(wp:NumberOfRequests),#SEQ(4)
+                STRING('Spiders:'),AT(19,62),USE(?NumberOfSpiderRequests),TRN,#ORIG(?NumberOfSpiderRequests),#SEQ(4)
+                STRING(@n14),AT(82,62),USE(wp:NumberOfSpiderRequests),RIGHT,TRN,#ORIG(wp:NumberOfSpiderRequests),#SEQ(4)
+                STRING('Not Found (404):'),AT(19,75),USE(?NumberOf404Requests),TRN,#ORIG(?NumberOf404Requests),#SEQ(4)
+                STRING(@n14),AT(82,75),USE(wp:NumberOf404Requests),RIGHT,TRN,#ORIG(wp:NumberOf404Requests),#SEQ(4)
+                STRING('Too Busy (500):'),AT(19,88),USE(?NumberOf500Requests),TRN,#ORIG(?NumberOf500Requests),#SEQ(4)
+                STRING(@n14),AT(82,88),USE(wp:NumberOf500Requests),RIGHT,TRN,#ORIG(wp:NumberOf500Requests),#SEQ(4)
+                STRING('Total Time:'),AT(19,101),USE(?TotalRequestTime),TRN,#ORIG(?TotalRequestTime),#SEQ(4)
+                STRING(@n10.2),AT(99,101),USE(wp:TotalRequestTime),RIGHT,TRN,#ORIG(wp:TotalRequestTime),#SEQ(4)
+              END
+              GROUP('Performance Breakdown'),AT(10,122,412,60),USE(?PerfBreakdown),BOXED,#ORIG(?PerfBreakdown),#SEQ(4)
+                STRING('<< 0.5'),AT(132,130),USE(?LT05),FONT(,,,FONT:bold),RIGHT,TRN,#ORIG(?LT05),#SEQ(4)
+                STRING('<< 1'),AT(203,130),USE(?LT1),FONT(,,,FONT:bold),RIGHT,TRN,#ORIG(?LT1),#SEQ(4)
+                STRING('<< 2'),AT(267,130),USE(?LT2),FONT(,,,FONT:bold),RIGHT,TRN,#ORIG(?LT2),#SEQ(4)
+                STRING('<< 5'),AT(331,130),USE(?LT5),FONT(,,,FONT:bold),RIGHT,TRN,#ORIG(?LT5),#SEQ(4)
+                STRING('> 5'),AT(395,130),USE(?GT5),FONT(,,,FONT:bold),RIGHT,TRN,#ORIG(?GT5),#SEQ(4)
+                STRING('Number of requests:'),AT(19,143),USE(?Numberbreakdown),TRN,#ORIG(?Numberbreakdown),#SEQ(4)
+                STRING(@n11),AT(95,143),USE(wp:NumberOfRequestsLTHalf),RIGHT,TRN,#ORIG(wp:NumberOfRequestsLTHalf),#SEQ(4)
+                STRING(@n11),AT(159,143),USE(wp:NumberOfRequestsLTOne),RIGHT,TRN,#ORIG(wp:NumberOfRequestsLTOne),#SEQ(4)
+                STRING(@n11),AT(223,143),USE(wp:NumberOfRequestsLTTwo),RIGHT,TRN,#ORIG(wp:NumberOfRequestsLTTwo),#SEQ(4)
+                STRING(@n11),AT(287,143),USE(wp:NumberOfRequestsLTFive),RIGHT,TRN,#ORIG(wp:NumberOfRequestsLTFive),#SEQ(4)
+                STRING(@n11),AT(351,143),USE(wp:NumberOfRequestsGTFive),RIGHT,TRN,#ORIG(wp:NumberOfRequestsGTFive),#SEQ(4)
+                STRING('Total Response Time (s):'),AT(19,156),USE(?totaltimeBreakdown),TRN,#ORIG(?totaltimeBreakdown),#SEQ(4)
+                STRING(@n11),AT(95,156),USE(wp:RequestTimeLTHalf),RIGHT,TRN,#ORIG(wp:RequestTimeLTHalf),#SEQ(4)
+                STRING(@n11),AT(159,156),USE(wp:RequestTimeLTOne),RIGHT,TRN,#ORIG(wp:RequestTimeLTOne),#SEQ(4)
+                STRING(@n11),AT(223,156),USE(wp:RequestTimeLTTwo),RIGHT,TRN,#ORIG(wp:RequestTimeLTTwo),#SEQ(4)
+                STRING(@n11),AT(287,156),USE(wp:RequestTimeLTFive),RIGHT,TRN,#ORIG(wp:RequestTimeLTFive),#SEQ(4)
+                STRING(@n11),AT(351,156),USE(wp:RequestTimeGTFive),RIGHT,TRN,#ORIG(wp:RequestTimeGTFive),#SEQ(4)
+                STRING('Average Response Time (s):'),AT(19,169),USE(?timeBreakdown),TRN,#ORIG(?timeBreakdown),#SEQ(4)
+                STRING(@n4.2),AT(129,169),USE(wp:AverageRequestTimeLTHalf),RIGHT,TRN,#ORIG(wp:AverageRequestTimeLTHalf),#SEQ(4)
+                STRING(@n4.2),AT(193,169),USE(wp:AverageRequestTimeLTOne),RIGHT,TRN,#ORIG(wp:AverageRequestTimeLTOne),#SEQ(4)
+                STRING(@n4.2),AT(257,169),USE(wp:AverageRequestTimeLTTwo),RIGHT,TRN,#ORIG(wp:AverageRequestTimeLTTwo),#SEQ(4)
+                STRING(@n4.2),AT(321,169),USE(wp:AverageRequestTimeLTFive),RIGHT,TRN,#ORIG(wp:AverageRequestTimeLTFive),#SEQ(4)
+                STRING(@n10),AT(355,169),USE(wp:AverageRequestTimeGTFive),RIGHT,TRN,#ORIG(wp:AverageRequestTimeGTFive),#SEQ(4)
+              END
+              GROUP('Resources'),AT(10,189,232,105),USE(?PerfResources),BOXED,#ORIG(?PerfResources),#SEQ(4)
+                STRING('Current'),AT(124,197),USE(?Current),FONT(,,,FONT:bold),TRN,#ORIG(?Current),#SEQ(4)
+                STRING('Maximum'),AT(178,197),USE(?Maximum),FONT(,,,FONT:bold),TRN,#ORIG(?Maximum),#SEQ(4)
+                STRING('Threads:'),AT(19,210),USE(?Threads),TRN,#ORIG(?Threads),#SEQ(4)
+                STRING(@n11),AT(95,210),USE(wp:NumberOfThreads),RIGHT,TRN,#ORIG(wp:NumberOfThreads),#SEQ(4)
+                STRING(@n11),AT(158,210),USE(wp:MaximumThreads),RIGHT,TRN,#ORIG(wp:MaximumThreads),#SEQ(4)
+                STRING('Sessions'),AT(19,223),USE(?Sessions),TRN,#ORIG(?Sessions),#SEQ(4)
+                STRING(@n11),AT(95,223),USE(wp:NumberOfSessions),RIGHT,TRN,#ORIG(wp:NumberOfSessions),#SEQ(4)
+                STRING(@n11),AT(158,223),USE(wp:MaximumSessions),RIGHT,TRN,#ORIG(wp:MaximumSessions),#SEQ(4)
+                STRING('Session Data:'),AT(19,236),USE(?SessionData),TRN,#ORIG(?SessionData),#SEQ(4)
+                STRING(@n11),AT(95,236),USE(wp:NumberOfSessionData),RIGHT,TRN,#ORIG(wp:NumberOfSessionData),#SEQ(4)
+                STRING(@n11),AT(158,236),USE(wp:MaximumSessionData),RIGHT,TRN,#ORIG(wp:MaximumSessionData),#SEQ(4)
+                STRING('Thread Pool:'),AT(19,249),USE(?threadPool),TRN,#ORIG(?threadPool),#SEQ(4)
+                STRING(@n11),AT(95,249),USE(wp:NumberOfThreadPool),RIGHT,TRN,#ORIG(wp:NumberOfThreadPool),#SEQ(4)
+                STRING(@n11),AT(158,249),USE(wp:MaximumThreadPool),RIGHT,TRN,#ORIG(wp:MaximumThreadPool),#SEQ(4)
+                STRING('Connections:'),AT(19,262),USE(?connections),TRN,#ORIG(?connections),#SEQ(4)
+                STRING(@n11),AT(95,262),USE(wp:NumberOfConnections),RIGHT,TRN,#ORIG(wp:NumberOfConnections),#SEQ(4)
+                STRING(@n11),AT(158,262),USE(wp:MaximumConnections),RIGHT,TRN,#ORIG(wp:MaximumConnections),#SEQ(4)
+                STRING('WebSocket Connections :'),AT(19,275),USE(?websocketsconnections),TRN,#ORIG(?websocketsconnections),#SEQ(4)
+                STRING(@n11),AT(95,275),USE(wp:NumberofWebSocketConnections),RIGHT,TRN,#ORIG(wp:NumberofWebSocketConnections),#SEQ(4)
+                STRING(@n11),AT(158,275),USE(wp:MaximumWebSocketConnections),RIGHT,TRN,#ORIG(wp:MaximumWebSocketConnections),#SEQ(4)
+              END
+              BUTTON('Refresh Cache'),AT(247,255,75,16),USE(?RefreshCacheButton),#ORIG(?RefreshCacheButton),#SEQ(4)
+              BUTTON('Clear'),AT(247,275,45,16),USE(?ClearStatsButton),#ORIG(?ClearStatsButton),#SEQ(4)
+            END
+            TAB('Settings'),USE(?SettingsTab)
+              SHEET,AT(11,22,438,266),USE(?SettingsSheet),#ORIG(?SettingsSheet),#SEQ(5)
+                TAB('Security'),USE(?SecurityTab),#ORIG(?SecurityTab),#SEQ(5)
+                  PROMPT('Secure Port:'),AT(21,39),USE(?set:SecurePort:Prompt),TRN,#ORIG(?set:SecurePort:Prompt),#SEQ(5)
+                  ENTRY(@n6),AT(121,39,60,10),USE(set:SecurePort),OVR,#ORIG(set:SecurePort),#SEQ(5)
+                  CHECK('Testing'),AT(203,39),USE(set:Staging),TRN,#ORIG(set:Staging),#SEQ(5)
+                  PROMPT('Insecure Port:'),AT(21,55),USE(?set:InsecurePort:Prompt),TRN,#ORIG(?set:InsecurePort:Prompt),#SEQ(5)
+                  ENTRY(@n6),AT(121,55,60,10),USE(set:InsecurePort),OVR,#ORIG(set:InsecurePort),#SEQ(5)
+                  BUTTON('Certificates'),AT(291,39),USE(?GetCertificatesButton),#ORIG(?GetCertificatesButton),#SEQ(5)
+                  BUTTON('Restart Server'),AT(352,39),USE(?RestartButton),#ORIG(?RestartButton),#SEQ(5)
+                  PROMPT('Certificates Folder:'),AT(21,71),USE(?set:CertificatesFolder:Prompt),TRN,#ORIG(?set:CertificatesFolder:Prompt),#SEQ(5)
+                  ENTRY(@s255),AT(121,71,317,12),USE(set:CertificatesFolder),#ORIG(set:CertificatesFolder),#SEQ(5)
+                  PROMPT('Acme Web Folder:'),AT(21,87),USE(?set:AcmeFolder:Prompt),TRN,#ORIG(?set:AcmeFolder:Prompt),#SEQ(5)
+                  ENTRY(@s255),AT(121,87,317,12),USE(set:AcmeFolder),#ORIG(set:AcmeFolder),#SEQ(5)
+                  PROMPT('CA Account:'),AT(21,103),USE(?set:AccountName:Prompt),TRN,#ORIG(?set:AccountName:Prompt),#SEQ(5)
+                  ENTRY(@s255),AT(121,103,317,12),USE(set:AccountName),#ORIG(set:AccountName),#SEQ(5)
+                  PROMPT('Bind To IP Address:'),AT(21,119),USE(?set:BindToIpAddress:Prompt),TRN,#ORIG(?set:BindToIpAddress:Prompt),#SEQ(5)
+                  ENTRY(@s100),AT(121,119,317,12),USE(set:BindToIpAddress),#ORIG(set:BindToIpAddress),#SEQ(5)
+                  PROMPT('Domains:'),AT(21,135),USE(?set:Domains:Prompt),TRN,#ORIG(?set:Domains:Prompt),#SEQ(5)
+                  TEXT,AT(121,135,317,35),USE(set:Domains),HVSCROLL,#ORIG(set:Domains),#SEQ(5)
+                  TEXT,AT(121,180,317,70),USE(?LogText),HVSCROLL,#ORIG(?LogText),#SEQ(5)
+                END
+                TAB('Site'),USE(?SiteTab),#ORIG(?SiteTab),#SEQ(5)
+                  PROMPT('Web folder:'),AT(21,39),USE(?set:WebFolder:Prompt),TRN,#ORIG(?set:WebFolder:Prompt),#SEQ(5)
+                  ENTRY(@s255),AT(116,39,300,10),USE(set:WebFolder),#ORIG(set:WebFolder),#SEQ(5)
+                  PROMPT('Session Timeout:'),AT(21,58),USE(?set:SessionTimeout:Prompt),TRN,#ORIG(?set:SessionTimeout:Prompt),#SEQ(5)
+                  ENTRY(@t1),AT(116,56,40,12),USE(set:SessionTimeout),#ORIG(set:SessionTimeout),#SEQ(5)
+                  GROUP('Server Headers'),AT(19,82,405,112),USE(?ServerHeaders),BOXED,#ORIG(?ServerHeaders),#SEQ(5)
+                    PROMPT('X-Frame-Options:'),AT(29,98),USE(?set:xFrameOptions:Prompt),TRN,#ORIG(?set:xFrameOptions:Prompt),#SEQ(5)
+                    ENTRY(@s255),AT(159,98,250,12),USE(set:xFrameOptions),#ORIG(set:xFrameOptions),#SEQ(5)
+                    PROMPT('Access-Control-Allow-Origin:'),AT(29,114),USE(?set:AccessControlAllowOrigin:Prompt),TRN,#ORIG(?set:AccessControlAllowOrigin:Prompt),#SEQ(5)
+                    ENTRY(@s255),AT(159,114,250,12),USE(set:AccessControlAllowOrigin),#ORIG(set:AccessControlAllowOrigin),#SEQ(5)
+                    PROMPT('Strict-Transport-Security:'),AT(29,130),USE(?set:StrictTransportSecurity:Prompt),TRN,#ORIG(?set:StrictTransportSecurity:Prompt),#SEQ(5)
+                    ENTRY(@s255),AT(159,130,250,12),USE(set:StrictTransportSecurity),#ORIG(set:StrictTransportSecurity),#SEQ(5)
+                    PROMPT('Content-Security-Policy:'),AT(29,146),USE(?set:ContentSecurityPolicy:Prompt), |
+                      TRN,#ORIG(?set:ContentSecurityPolicy:Prompt),#SEQ(5)
+                    ENTRY(@s255),AT(159,146,250,12),USE(set:ContentSecurityPolicy),#ORIG(set:ContentSecurityPolicy),#SEQ(5)
+                    PROMPT('Content-Security-Policy-Report-Only:'),AT(29,162),USE(?set:ContentSecurityPolicyReportOnly:Prompt), |
+                      TRN,#ORIG(?set:ContentSecurityPolicyReportOnly:Prompt),#SEQ(5)
+                    ENTRY(@s255),AT(159,162,250,12),USE(set:ContentSecurityPolicyReportOnly),#ORIG(set:ContentSecurityPolicyReportOnly),#SEQ(5)
+                    PROMPT('Referrer-Policy:'),AT(29,178),USE(?set:ReferrerPolicy:Prompt), |
+                      TRN,#ORIG(?set:ReferrerPolicy:Prompt),#SEQ(5)
+                    ENTRY(@s255),AT(159,178,250,12),USE(set:ReferrerPolicy),#ORIG(set:ReferrerPolicy),#SEQ(5)
+                  END
+                END
+              END
+            END
+          END
+          BUTTON('Graceful Close'),AT(338,298,64,14),USE(?GracefulCloseButton),#ORIG(?GracefulCloseButton),#SEQ(6)
+          BUTTON('Close'),AT(405,298,50,14),USE(?Close),#ORIG(?Close),#SEQ(2)
+        END
+[PROCEDURE]
+NAME WebHandler
+PROTOTYPE '(String p_String)'
+PARAMETERS '(String p_String)'
+[COMMON]
+FROM NetTalk NetWebHandleRequest
+CATEGORY 'NetWebHandleRequest'
+[PROMPTS]
+[ADDITION]
+NAME NetTalk IncludeNetTalkObject
+[INSTANCE]
+INSTANCE 2
+[PROMPTS]
+%ClassItem UNIQUE DEFAULT  ('Default')
+
+%ThisObjectName DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('p_web')
+
+%ABCBaseClass DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('NetWebServerWorker')
+
+%NetSuppressErrorMsg DEPEND %ClassItem LONG TIMES 1
+WHEN  ('Default') (1)
+
+%SimpleMode DEPEND %ClassItem DEFAULT TIMES 1
+WHEN  ('Default') ('Client')
+[EMBED]
+EMBED %NetTalkMethodCodeSection
+[INSTANCES]
+WHEN '2'
+[INSTANCES]
+WHEN 'GetPassword'
+[INSTANCES]
+WHEN '(String pUser),String'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 7500
+PROPERTY:END
+!CASE pUser
+!OF 'demo'
+!  ReturnValue = 'demo'
+!END
+[END]
+[END]
+WHEN 'Authenticate'
+[INSTANCES]
+WHEN '(String pUser,String pPassword),Long'
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 7500
+PROPERTY:END
+ReturnValue = False
+! This is just an example of embed code here. Use a stronger test in your app.
+IF pUser = 'demo' AND pPassword = 'demo'
+  ReturnValue = true
+  self.SetSessionLevel(0)
+END
+! Here's an example of reading the user name and password from a table. Alter to match your system.
+! Access:Users.Open()
+! Access:Users.UseFile()
+! Use:UserName = pUser
+! If Access:Users.Fetch(use:UserNameKey) = LevelBenign
+!   If pPassword = use:password
+!     ReturnValue = true
+!     self.SetSessionLevel(0)
+!   End
+! End
+! Access:Users.Close()
+! Return ReturnValue
+[END]
+[END]
+[END]
+[END]
+[END]
+[CALLS]
+PageFooterTag
+PageHeaderTag
+IndexPage
+LoginForm
+[PROCEDURE]
+NAME PageHeaderTag
+PROTOTYPE '(NetWebServerWorker p_web)'
+PARAMETERS '(NetWebServerWorker p_web)'
+GLOBAL
+[COMMON]
+DESCRIPTION '***** Includes Menu *****'
+FROM NetTalk NetWebSource
+[PROMPTS]
+%GenerateDiv LONG  (1)
+%htmls MULTI LONG  (1,2,3)
+%HtmlWhat DEPEND %htmls DEFAULT TIMES 3
+WHEN  (1) ('1')
+WHEN  (2) ('1')
+WHEN  (3) ('1')
+
+%HtmlProc DEPEND %htmls PROCEDURE TIMES 0
+
+%HtmlParams DEPEND %htmls DEFAULT TIMES 3
+WHEN  (1) ('p_web')
+WHEN  (2) ('p_web')
+WHEN  (3) ('p_web')
+
+%HtmlReturn DEPEND %htmls FIELD TIMES 0
+
+%htmlCondition DEPEND %htmls DEFAULT TIMES 3
+WHEN  (1) ('p_web.PageName = p_web.site.LoginPage')
+WHEN  (2) ('p_web.GetSessionLoggedIn() = 0 and p_web.PageName <<> p_web.site.LoginPage')
+WHEN  (3) ('p_web.GetSessionLoggedIn() and p_web.PageName <<> p_web.site.LoginPage')
+
+%htmlLocation DEPEND %htmls DEFAULT TIMES 3
+WHEN  (1) ('201')
+WHEN  (2) ('201')
+WHEN  (3) ('201')
+
+%HtmlName DEPEND %htmls DEFAULT TIMES 3
+WHEN  (1) ('HeadingPlain')
+WHEN  (2) ('HeadingWhenLoggedOut')
+WHEN  (3) ('HeadingWhenLoggedIn')
+
+%Html DEPEND %htmls DEFAULT TIMES 3
+WHEN  (1) ('<<div class="nt-left nt-site-header-logo"><img src="/images/logo.png" /><</div><<h1>ventekweb<</h1>')
+WHEN  (2) ('<<div class="nt-left nt-site-header-logo"><img src="/images/logo.png" /><</div><<h1>ventekweb<</h1>')
+WHEN  (3) ('<<div class="nt-left nt-site-header-logo"><img src="/images/logo.png" /><</div><<h1>ventekweb<</h1>')
+
+%DropList3 DEFAULT  ('Before <<body>[101]|After <<body>[201]|In Processed code[301]')
+%CssDiv DEFAULT  ('''nt-site-header-6 ui-widget-header ui-corner-top''')
+%IsHeader LONG  (1)
+%MobileCssDiv DEFAULT  ('''''')
+
+[ADDITION]
+NAME NetTalk NetWebMenu
+[INSTANCE]
+INSTANCE 3
+[PROMPTS]
+%MenuStyle DEFAULT  ('Net:Web:Ddm')
+%Menus MULTI LONG  (1,2,3,4)
+
+%Menu DEPEND %Menus DEFAULT TIMES 4
+WHEN  (1) ('''Home''')
+WHEN  (2) ('''Browse''')
+WHEN  (3) ('''Login''')
+WHEN  (4) ('''Logout''')
+
+%MenuCondition DEPEND %Menus DEFAULT TIMES 2
+WHEN  (3) ('p_web.GetSessionLoggedIn() = 0 and p_web.PageName <<> p_web.site.LoginPage')
+WHEN  (4) ('p_web.GetSessionLoggedIn() = 1 and p_web.PageName <<> p_web.site.LoginPage')
+
+%MenuURL DEPEND %Menus DEFAULT TIMES 1
+WHEN  (1) ('''IndexPage''')
+
+%MenuProc DEPEND %Menus PROCEDURE TIMES 4
+WHEN  (1) ()
+WHEN  (2) ()
+WHEN  (3) (LoginForm)
+WHEN  (4) (LoginForm)
+
+%MenuItems DEPEND %Menus MULTI LONG TIMES 1
+WHEN  (2) (1)
+
+%MenuItem DEPEND %MenuItems DEFAULT TIMES 1
+WHEN  (2) TIMES 1
+WHEN  (1) ('''Vendas''')
+
+%MenuItemProc DEPEND %MenuItems PROCEDURE TIMES 1
+WHEN  (2)TIMES 1
+WHEN  (1) (Browsevendas)
+
+%MenuItemProcAjax DEPEND %MenuItems DEFAULT TIMES 1
+WHEN  (2)TIMES 1
+WHEN  (1) (1)
+
+%MenuTableA LONG  (0)
+%MenuId DEFAULT  ('''menu''')
+[PROCEDURE]
+NAME PageFooterTag
+PROTOTYPE '(NetWebServerWorker p_web)'
+PARAMETERS '(NetWebServerWorker p_web)'
+GLOBAL
+[COMMON]
+FROM NetTalk NetWebSource
+[PROMPTS]
+%GenerateDiv LONG  (1)
+%htmls MULTI LONG  (1,2)
+%HtmlWhat DEPEND %htmls DEFAULT TIMES 2
+WHEN  (1) ('1')
+WHEN  (2) ('1')
+
+%HtmlProc DEPEND %htmls PROCEDURE TIMES 0
+
+%HtmlParams DEPEND %htmls DEFAULT TIMES 2
+WHEN  (1) ('p_web')
+WHEN  (2) ('p_web')
+
+%HtmlReturn DEPEND %htmls FIELD TIMES 0
+
+%htmlCondition DEPEND %htmls DEFAULT TIMES 2
+WHEN  (1) ('p_web.GetSessionLoggedIn() ')
+WHEN  (2) ('p_web.GetSessionLoggedIn() = 0')
+
+%htmlLocation DEPEND %htmls DEFAULT TIMES 2
+WHEN  (1) ('201')
+WHEN  (2) ('201')
+
+%HtmlName DEPEND %htmls DEFAULT TIMES 2
+WHEN  (1) ('LoggedIn')
+WHEN  (2) ('NotLoggedIn')
+
+%Html DEPEND %htmls DEFAULT TIMES 2
+WHEN  (1) ('<<div>Copyright <<!-- IvoNet 2019 --><</div><div class="nt-right nt-countdown">Session Expires In:<div id="countdown"></div></div>')
+WHEN  (2) ('<<div>Copyright <<!-- IvoNet 2019 --><</div>')
+
+%DropList3 DEFAULT  ('Before <<body>[101]|After <<body>[201]|In Processed code[301]')
+%CssDiv DEFAULT  ('''nt-left nt-width-100 nt-site-footer''')
+%MobileCssDiv DEFAULT  ('''''')
+%IsFooter LONG  (1)
+[EMBED]
+EMBED %ProcessedCode
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 2500
+PROPERTY:END
+  if (p_web.GetSessionLoggedIn() and p_web.PageName <> p_web.site.LoginPage)
+    ! parameter 1 is the session time
+    ! parameter 2 is the name of the login page.
+    ! parameter 3 is the id of the <div> in the html.
+    p_web.Script('startCountDown('& int(p_web.site.SessionExpiryAfterHS/100) &',"'& clip(p_web.site.LoginPage) &'","countdown");')
+  end
+
+[END]
+[END]
+[PROCEDURE]
+NAME IndexPage
+PROTOTYPE '(NetWebServerWorker p_web)'
+PARAMETERS '(NetWebServerWorker p_web)'
+[COMMON]
+FROM NetTalk NetWebPage
+[PROMPTS]
+%webPageName DEFAULT  ('index.htm')
+%htmls MULTI LONG  (1)
+%HtmlName DEPEND %htmls DEFAULT TIMES 1
+WHEN  (1) ('body')
+
+%Html DEPEND %htmls DEFAULT TIMES 1
+WHEN  (1) ('<<br /><13,10>Welcome<<br /><<br />')
+
+%HtmlWhat DEPEND %htmls DEFAULT TIMES 1
+WHEN  (1) ('1')
+
+%htmlLocation DEPEND %htmls DEFAULT TIMES 1
+WHEN  (1) ('201')
+
+%incStdHeader LONG  (1)
+%incStdFooter LONG  (1)
+%protocol DEFAULT  ('HTML')
+%ContentType DEFAULT  ('''text/html''')
+%PageBodyClass DEFAULT  ('''nt-body''')
+%PageBodyDivClass DEFAULT  ('''nt-body-div''')
+%ProcedureParameters DEFAULT  ('(NetWebServerWorker p_web)')
+[PROCEDURE]
+NAME LoginForm
+PROTOTYPE '(NetWebServerWorker p_web,long p_action=0),long,proc'
+PARAMETERS '(NetWebServerWorker p_web,long p_action=0)'
+[COMMON]
+FROM NetTalk NetWebForm
+[DATA]
+Ans                      LONG
+Loc:Login                STRING(255)
+Loc:Password             STRING(255)
+Loc:Remember             LONG
+loc:Hash                 LONG
+[PROMPTS]
+%FormStyle DEFAULT  ('Net:Web:Rounded')
+%FormSource DEFAULT  ('Memory')
+%FormAction DEFAULT  ('''IndexPage''')
+%Tabs MULTI LONG  (1)
+%TabHeading DEPEND %Tabs DEFAULT TIMES 1
+WHEN  (1) ('''Login''')
+
+%FormFields DEPEND %Tabs MULTI LONG TIMES 1
+WHEN  (1) (1,2,3,4)
+
+%FormField DEPEND %FormFields FIELD TIMES 1
+WHEN  (1)TIMES 4
+WHEN  (1) (Loc:Login)
+WHEN  (2) (Loc:Password)
+WHEN  (3) (Loc:Remember)
+WHEN  (4) (loc:Hash)
+
+%FormFieldPrompt DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 3
+WHEN  (1) ('''Login:''')
+WHEN  (2) ('''Password:''')
+WHEN  (3) ('''Remember me''')
+
+%FormFieldType DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 4
+WHEN  (1) ('String')
+WHEN  (2) ('String')
+WHEN  (3) ('CheckBox')
+WHEN  (4) ('Hidden')
+
+%FormFieldPasswordType DEPEND %FormFields LONG TIMES 1
+WHEN  (1)TIMES 1
+WHEN  (2) (1)
+
+%FormFieldWidth DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 2
+WHEN  (1) ('20')
+WHEN  (2) ('20')
+
+%Primes MULTI LONG  (1)
+%Prime DEPEND %Primes DEFAULT TIMES 1
+WHEN  (1) ('loc:Hash')
+
+%PrimeTo DEPEND %Primes DEFAULT TIMES 1
+WHEN  (1) ('random(1,2000000000)')
+
+%PrimeForInsert DEPEND %Primes LONG TIMES 1
+WHEN  (1) (1)
+
+%PrimeForChange DEPEND %Primes LONG TIMES 1
+WHEN  (1) (1)
+
+%FieldList UNIQUE DEFAULT  ('Loc:Login','Loc:Password','Loc:Remember','loc:Hash')
+%FormFieldEquate DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 4
+WHEN  (1) ('Loc:Login')
+WHEN  (2) ('Loc:Password')
+WHEN  (3) ('Loc:Remember')
+WHEN  (4) ('loc:Hash')
+
+%IncludeCancelButton LONG  (0)
+%IncludeSaveButton LONG  (1)
+%panelheight DEFAULT  ('350')
+%csLineAfterfHeading LONG  (1)
+%csLineAfterfSubHeading LONG  (1)
+%FormTableWidth DEFAULT  ('''300''')
+%ProcedureStyle DEFAULT  (''' nt-fix-center nt-width-400px''')
+%AllowAutoComplete DEPEND %FormFields LONG TIMES 1
+WHEN  (1)TIMES 4
+WHEN  (1) (0)
+WHEN  (2) (0)
+WHEN  (3) (0)
+WHEN  (4) (0)
+
+%vImm DEPEND %FormFields DEFAULT TIMES 1
+WHEN  (1)TIMES 4
+WHEN  (1) ('1')
+WHEN  (2) ('0')
+WHEN  (3) ('1')
+WHEN  (4) ('0')
+
+%GenerateComments LONG  (1)
+%vfImm DEFAULT  ('2')
+%PopupInvalid LONG  (1)
+%AllowUpdates LONG  (1)
+
+%FormWindowWidth DEFAULT  ('600')
+%FormButtonsPosition DEFAULT  ('2')
+
+[EMBED]
+EMBED %ValidateUpdate
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+LABEL
+PROPERTY:END
+  ! The HASH test prevents the same form-post from being used "twice".
+  ! This improves security on public computers.
+
+  if p_web.GetValue('loc:hash') = p_web.GetSessionValue('loc:hash')
+
+    ! login checking goes here
+    if p_web.Authenticate(Loc:Login,Loc:Password) = true ! WebHandler, Authenticate method needs to be fleshed out.
+      p_web.ValidateLogin()                   ! this sets the session to "logged in"
+      p_web.SetSessionValue('loc:hash',0)         ! clear the hash, so this login can't get "replayed".
+
+      ! set any session variables based on the logged in user.
+
+      ! this next bit shows how the login & password can be stored in the browser
+      ! so that it is "remembered" for next time
+      if loc:remember = 1
+        p_web.SetCookie('loc__login',loc:login,today()+30)       ! note the expiry date. It's good form
+        p_web.SetCookie('loc__password',loc:password,today()+30) ! to make sure your cookies expire sometime.
+      else
+        ! don't remember, so clear cookies in browser.
+        p_web.DeleteCookie('loc__login')
+        p_web.DeleteCookie('loc__password')
+      End
+    Else
+      loc:invalid = 'Loc:Login'
+      p_web.SetValue('retry',p_web.site.LoginPage)
+      loc:Alert = 'Login Failed. Try Again.'
+      p_web.DeleteCookie('loc__login')
+      p_web.DeleteCookie('loc__password')
+    End
+  Else
+    p_web.DeleteCookie('loc__login')
+    p_web.DeleteCookie('loc__password')
+  End
+  ! delete the session values, so if the user comes back to the form, the items are not set.
+  p_web.deletesessionvalue('loc:login')
+  p_web.deletesessionvalue('loc:password')
+  p_web.deletesessionvalue('loc:remember')
+  p_web.deletevalue('loc:login')
+  p_web.deletevalue('loc:password')
+  p_web.deletevalue('loc:remember')
+
+[END]
+EMBED %GenerateForm
+[DEFINITION]
+[SOURCE]
+PROPERTY:BEGIN
+PRIORITY 5000
+PROPERTY:END
+! change the 'save' button so it says 'login'
+p_web.site.SaveButton.TextValue = 'Login'
+p_web.site.SaveButton.Tooltip = 'Click here to Login'
+
+! coming to the login screen automatically logs the user out.
+! Note that logging out does not delete the session.
+p_web.SetSessionLoggedIn(0)
+[END]
+[END]

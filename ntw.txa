@@ -1,0 +1,64 @@
+[APPLICATION]
+VERSION 28
+TODO ABC ToDo
+PROCEDURE WebServer
+[COMMON]
+FROM ABC
+[PROMPTS]
+%WindowFrameDragging LONG  (0)
+%UseDefaultXPManifest LONG  (0)
+%GenerateXPManifest LONG  (1)
+%LinkGenerateXPManifest LONG  (1)
+%AddVistaXPManifest LONG  (1)
+%VistaManifestExecutionLevel DEFAULT  ('asInvoker')
+%GlobalInterLine DEFAULT  ('10')
+[ADDITION]
+NAME NetTalk Activate_NetTalk
+[INSTANCE]
+INSTANCE 1
+[PROMPTS]
+%DynamicDLL LONG  (1)
+%NTSecwin4IsHere LONG  (0)
+[ADDITION]
+NAME NetTalk NetWebServerGlobal
+[INSTANCE]
+INSTANCE 2
+PARENT 1
+[PROMPTS]
+%gPopups DEFAULT  ('Default')
+[ADDITION]
+NAME StringTheory Activate_StringTheory
+[INSTANCE]
+INSTANCE 3
+[PROMPTS]
+%md5 LONG  (0)
+[ADDITION]
+NAME xFiles ActivatexFiles
+[INSTANCE]
+INSTANCE 4
+[PROMPTS]
+%NoGloxFiles LONG  (0)
+[ADDITION]
+NAME jFiles ActivatejFiles
+[INSTANCE]
+INSTANCE 5
+[PROMPTS]
+%NoGlojFiles LONG  (0)
+[PERSIST]
+[PROJECT]
+-- Generator
+[PROGRAM]
+[COMMON]
+FROM ABC ABC
+[END]
+[MODULE]
+[COMMON]
+FROM ABC GENERATED
+[END]
+[MODULE]
+[COMMON]
+FROM ABC GENERATED
+[PROCEDURE]
+NAME WebServer
+[COMMON]
+[END]

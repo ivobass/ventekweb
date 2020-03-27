@@ -1,0 +1,17 @@
+body {
+font-family: "Open Sans","Segoe UI",Tahoma, Verdana,  Arial, Helvetica, sans-serif;
+font-size: 14pt;
+}
+
+.errorpage{
+color: #888;
+}
+
+.errorpage h1{
+color: #444;
+font-size: 2em;
+}
+
+.errorpage hr{
+color: #888;
+}

@@ -1,0 +1,29 @@
+ Volume in drive C is Windows
+ Volume Serial Number is 7066-47F3
+
+ Directory of C:\programas Clarion\ventek\ventekweb\ventekweb\web\themes
+
+05/07/2019  04:55 PM    <DIR>          .
+05/07/2019  04:55 PM    <DIR>          ..
+05/07/2019  04:56 PM    <DIR>          absolution
+05/07/2019  04:56 PM    <DIR>          aristo
+05/07/2019  04:56 PM    <DIR>          base
+05/07/2019  04:56 PM    <DIR>          bootstrap
+05/07/2019  04:56 PM    <DIR>          bottle
+05/07/2019  04:56 PM    <DIR>          material17
+05/07/2019  04:56 PM    <DIR>          metroblue
+05/07/2019  04:56 PM    <DIR>          metroorange
+05/07/2019  04:56 PM    <DIR>          redmond
+05/07/2019  04:56 PM    <DIR>          seven
+05/07/2019  04:56 PM    <DIR>          shoestrap1
+05/07/2019  04:56 PM    <DIR>          shoestrap2
+05/07/2019  04:56 PM    <DIR>          shoestrap3
+05/07/2019  04:56 PM    <DIR>          smoothness
+05/07/2019  04:56 PM    <DIR>          sunny
+03/26/2020  01:04 PM                 0 themes.txt
+05/07/2019  04:56 PM    <DIR>          ui-darkness
+05/07/2019  04:56 PM    <DIR>          ui-lightness
+05/07/2019  04:56 PM    <DIR>          whales
+05/07/2019  04:56 PM    <DIR>          windows
+               1 File(s)              0 bytes
+              21 Dir(s)  106,120,089,600 bytes free

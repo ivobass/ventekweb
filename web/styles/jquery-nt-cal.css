@@ -1,0 +1,219 @@
+.nt-month-set{
+}
+
+.nt-month-header{
+text-align: center;
+padding: 3px;
+}
+
+.nt-month-header-cell > div{
+text-align: center;
+font-weight: bold;
+height: 1.8em !important;
+background-color: #F8F8FF!important;
+}
+
+.nt-monthday-cell{
+position:relative;/*5.23*/
+cursor: pointer;
+}
+
+.nt-monthday-cell a{
+text-decoration: none; 
+}
+
+.nt-monthday-empty-cell{
+border: 1px solid transparent !important;
+background-color: #FFFFF8;
+}
+
+
+.nt-month-big{
+margin-bottom: 1em;
+margin-right: 1em;
+background: url("") repeat scroll 0 0 white;  
+width:62em;
+}
+
+.nt-month-big > div > div {
+width: 8em;
+height: 8em;
+padding: 3px;
+border: 1px solid #DDDDDD;
+margin: 1px;
+float: left;
+background-color: #FFFFFF;
+}
+
+.nt-content{
+position: absolute;
+top: 0;
+left: 0;
+background-repeat: no-repeat; 
+background-position: bottom left;
+width: 100%;
+height: 100%;
+text-align: center;
+font-size: 1.1em;
+}
+
+.nt-label{
+text-align: center;
+font-size: 56pt;
+color: #DDDDDD;
+}
+
+.nt-label-empty{
+text-align: center;
+font-size: 56pt;
+color: #DDDDDD;
+}
+
+.nt-month-small{
+margin-bottom: 1em;
+margin-right: 1em;
+background: url("") repeat scroll 0 0 white;
+float:left;
+width:14.25em;
+}
+
+.nt-month-small > div > div {
+padding: 3px;
+border: 1px solid #DDDDDD;
+margin: 1px;
+float: left;
+width: 1.8em;
+text-align: center;
+}
+
+.nt-label-small{
+background-repeat: no-repeat; 
+background-position: bottom left;
+}
+
+.nt-label-empty-small{
+}
+
+.nt-holiday{
+color: #DDDDDD!important;
+background-color: #444444!important;
+}
+
+/* Corner radius */
+.cal-corner-right-small {
+-moz-border-radius: 0px 6px 6px 0px; 
+-webkit-border-radius:  0px 6px 6px 0px; 
+border-radius:  0px 6px 6px 0px; 
+/*behavior: url(PIE.htc);*/
+}
+
+.cal-corner-left-small { 
+-moz-border-radius: 6px 0px 0px 6px; 
+-webkit-border-radius:  6px 0px 0px 6px;
+border-radius:  6px 0px 0px 6px; 
+/*behavior: url(PIE.htc);*/
+}
+
+.cal-corner-all-small { 
+-moz-border-radius: 6px; 
+-webkit-border-radius: 6px; 
+border-radius: 6px; 
+/*behavior: url(PIE.htc);*/
+}
+
+.cal-corner-right {
+-moz-border-radius: 0px 12px 12px 0px; 
+-webkit-border-radius:  0px 12px 12px 0px; 
+border-radius:  0px 12px 12px 0px; 
+/*behavior: url(PIE.htc);*/
+}
+
+.cal-corner-left  {
+-moz-border-radius: 12px 0px 0px 12px; 
+-webkit-border-radius:  12px 0px 0px 12px;
+border-radius:  12px 0px 0px 12px; 
+/*behavior: url(PIE.htc);*/
+}
+
+.cal-corner-all { 
+-moz-border-radius: 12px; 
+-webkit-border-radius: 12px; 
+border-radius: 12px; 
+/*behavior: url(PIE.htc);*/
+}
+
+.cal-grad{
+}
+
+
+.cal-scroll{
+/*width: 400px;*/
+overflow: scroll;
+overflow-x: scroll;
+overflow-y: hidden;
+}
+
+
+.planner-header-row-size{
+height:  22px;
+width: 100%;
+}
+
+.planner-row-size{
+/*height: 52px;*/
+width: 100%;
+border: 0px solid #DDDDDD;
+}
+
+.planner-names-width{
+width: 10em;
+}
+
+.planner-data-width{
+width: 2em;
+}
+
+.planner-header-data-height{
+height: 14px;
+padding: 3px;
+}
+
+.planner-data-height{
+height: 100%;
+}
+
+.planner-border{
+border: 1px solid #dddddd;
+}
+
+
+.ui-resizable-e{
+border: 1px dashed #888888;
+width: 3px;
+}
+
+.planner-data{
+position:absolute;
+padding-left:0;
+padding-right:0;
+border: 1px solid #888888;
+overflow:hidden;
+z-index:10;
+}
+
+.ui-resizable-handle {
+z-index: 500;
+}
+
+.nt-relative{
+position:relative;
+}
+
+.planner-back{
+border:1px solid #FAFAFA;    
+position:absolute;
+top:0;
+left:0;
+color:#EEEEEE;        
+font-size:11pt;
+}

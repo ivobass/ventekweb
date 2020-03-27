@@ -1,0 +1,75 @@
+.nt-kbd > div > div{
+border: 0.4em solid #81809D;
+border-radius: 8px;
+color: #444488;
+float: left;
+font-size: 1.2em;
+font-weight: bold;
+margin: 0.5em;
+padding: 0.5em;
+font-family:"Lucida Console";
+}
+
+.nt-osk-x{
+float:none;
+display: inline-block;
+width:100%;
+}
+
+.nt-osk-1{
+}
+.nt-osk-2{
+}
+.nt-osk-3{
+}
+.nt-osk-4{
+}
+
+.nt-osk-caps{
+}
+
+.nt-osk-enter{
+}
+.nt-osk-backspace{
+}
+
+.nt-osk-shift{
+padding-right:2em!important;
+}
+
+.nt-osk-shift-invert{
+color:white!important;
+background:#444488;
+}
+
+.nt-osk-space{
+padding-left:10em!important;
+padding-right:10em!important;
+}
+.nt-osk-123{
+
+}
+.spacerkey{
+	border: transparent !Important;    
+    color: transparent !Important;
+}
+.spacerkey1{
+	border: transparent !Important;    
+    color: transparent !Important;
+	width: 2em;
+}
+.spacerkey2{
+	border: transparent !Important;    
+    color: transparent !Important;
+	width: 6em;
+}
+.spacerkey3{
+	border: transparent !Important;    
+    color: transparent !Important;
+	width: 10.5em;
+}
+.spacerkey4{
+	border: transparent !Important;    
+    color: transparent !Important;
+	width: 250px;
+}
