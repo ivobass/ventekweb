@@ -18,6 +18,10 @@ O projeto foi feito com Clarion NetTalk Web
 🔧 Tecnologias utilizadas:
 ------------------
 
+- CLARION
+- NETTALK
+- MYSQL
+
 <img src="assets/server.png" alt="page-home">
 
 servidor Nettalk Web Server Listening On IP Port: 88
