@@ -1,25 +1,25 @@
 <h1 align="center">
-    <img width="600" src="assets/" />
+    <img width="600" src="assets/logosv.png" />
 </h1>
 
 
 <p align="center">
-Mobile App feita em Flutter
+WEB App feita em Clarion NetTalk Web
 </p>
 
 📌 IvoVenTekkies 
 ------------------
-O projeto foi feito com flutter e dart e php para criar uma api REST
+O projeto foi feito com Clarion NetTalk Web
 
 
-<img src="assets/ivoventek.png" alt="page-home">
+<img src="assets/ventekweb.png" alt="page-home">
 
 
 🔧 Tecnologias utilizadas:
 ------------------
 
-<img src="assets/dartflutter.png" alt="page-home">
-<img src="assets/images.png" alt="page-home">
+<img src="assets/server.png" alt="page-home">
+
 
 
 💬 Fale comigo
