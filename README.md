@@ -7,7 +7,7 @@
 WEB App feita em Clarion NetTalk Web
 </p>
 
-📌 IvoVenTekkies 
+📌 VenTekWeb 
 ------------------
 O projeto foi feito com Clarion NetTalk Web
 
@@ -19,6 +19,8 @@ O projeto foi feito com Clarion NetTalk Web
 ------------------
 
 <img src="assets/server.png" alt="page-home">
+
+servidor Nettalk Web Server Listening On IP Port: 88
 
 
 
